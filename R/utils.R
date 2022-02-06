@@ -10,7 +10,7 @@ input_character_vector <- function(x) {
 }
 
 input_POSIXct <- function(x) {
-  stopifnot(is.POSIXct(x))
+  stopifnot(inherits(x, "POSIXct"))
   tz <- attr(x, "tzone")
   if (tz == "") tz <- "UTC"
   as_utc_character <- format(x, "%Y-%m-%d %H:%M:%S", tz = tz)

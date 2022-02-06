@@ -1,4 +1,9 @@
 #' Create a validation function from an exemplar
+#'
+#' @param x The object for which to create an exemplar
+#' @param ... Additional arguments used when building the assertions. Currently
+#'   unused.
+#'
 #' @export
 exemplar <- function(x, ...) {
   # Deparse the input to x, and replace all punctuation with "_"

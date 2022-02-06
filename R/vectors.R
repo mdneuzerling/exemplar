@@ -1,5 +1,5 @@
 #' @export
-assertions.double <- function(x, data_name = "data") {
+assertions.double <- function(x, data_name = "data", ...) {
   min_value <- min(x, na.rm = TRUE)
   max_value <- max(x, na.rm = TRUE)
   c(
@@ -12,7 +12,7 @@ assertions.double <- function(x, data_name = "data") {
 }
 
 #' @export
-assertions.integer <- function(x, data_name = "data") {
+assertions.integer <- function(x, data_name = "data", ...) {
   min_value <- min(x, na.rm = TRUE)
   max_value <- max(x, na.rm = TRUE)
   c(
@@ -25,7 +25,7 @@ assertions.integer <- function(x, data_name = "data") {
 }
 
 #' @export
-assertions.logical <- function(x, data_name = "data") {
+assertions.logical <- function(x, data_name = "data", ...) {
   c(
     glue::glue("is.logical({data_name})"),
     generate_none_missing_assertion(x, data_name)
@@ -33,7 +33,7 @@ assertions.logical <- function(x, data_name = "data") {
 }
 
 #' @export
-assertions.character <- function(x, data_name = "data") {
+assertions.character <- function(x, data_name = "data", ...) {
   c(
     glue::glue("is.character({data_name})"),
     generate_none_missing_assertion(x, data_name),
@@ -42,7 +42,7 @@ assertions.character <- function(x, data_name = "data") {
 }
 
 #' @export
-assertions.POSIXct <- function(x, data_name = "data") {
+assertions.POSIXct <- function(x, data_name = "data", ...) {
   min_value <- input_POSIXct(min(x, na.rm = TRUE))
   c(
     glue::glue("is.POSIXct({data_name})"),

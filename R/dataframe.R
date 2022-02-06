@@ -1,9 +1,5 @@
-
 #' @export
-assertions.data.frame <- function(
-  x,
-  data_name = "data") {
-
+assertions.data.frame <- function(x, data_name = "data", ...) {
   selected <- x
   # selected <- tidyselect::eval_select(substitute(columns), x)
   selected_columns <- names(selected)

@@ -6,6 +6,12 @@
 \usage{
 exemplar(x, ...)
 }
+\arguments{
+\item{x}{The object for which to create an exemplar}
+
+\item{...}{Additional arguments used when building the assertions. Currently
+unused.}
+}
 \description{
 Create a validation function from an exemplar
 }
