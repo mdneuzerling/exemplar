@@ -58,6 +58,15 @@ Some checks are commented out. This is because the exemplar does not meet the cr
 
 A common use case might be machine learning with a train/test data split. A validation function can be generated using the training data as the _exemplar_, and then applied to the test data.
 
+Entire data frames can be used as a exemplars. Additionally, `exemplar` supports [`tidyselect`](https://tidyselect.r-lib.org) selectors, which limits the validation functions to certain columns. The following will all work:
+
+```r
+exemplar(mtcars) # will validate all columns
+exemplar(mtcars, wt, mpg)
+exemplar(mtcars, -cyl)
+exemplar(mtcars, starts_with("d"))
+```
+
 The functions produced by `exemplar` require at least R 3.5 (due to improvements made to `stopifnot`) but otherwise requires no dependencies. That is, `exemplar` generates functions that do not need `exemplar` or any other packages to run.
 
 ## Installation
