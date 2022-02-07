@@ -3,8 +3,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mdneuzerling/exemplar/workflows/R-CMD-check/badge.svg)](https://github.com/mdneuzerling/exemplar/actions)
-[![Last commit](https://img.shields.io/github/last-commit/mdneuzerling/lambdr/main.svg)](https://github.com/mdneuzerling/exemplar/tree/main)
-[![Codecov test coverage](https://codecov.io/gh/mdneuzerling/lambdr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mdneuzerling/exemplar?branch=main)
+[![Last commit](https://img.shields.io/github/last-commit/mdneuzerling/exemplar/main.svg)](https://github.com/mdneuzerling/exemplar/tree/main)
+[![Codecov test coverage](https://codecov.io/gh/mdneuzerling/exemplar/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mdneuzerling/exemplar?branch=main)
 [![license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://choosealicense.com/licenses/mit/)
 
 <!-- badges: end -->
