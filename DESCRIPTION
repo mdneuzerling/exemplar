@@ -1,9 +1,11 @@
 Package: exemplar
-Title: What the Package Does (One Line, Title Case)
+Title: Generate Validation Functions to Make Sure One Object Looks Like Another
 Version: 0.0.0.9000
 Authors@R: 
     person("David", "Neuzerling", , "david@neuzerling.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Generate dependency-free validation functions to make sure one
+    object looks like another (its exemplar). These functions can be modified
+    as needed and placed in validation pipelines.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
