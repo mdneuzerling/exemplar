@@ -7,11 +7,32 @@
 exemplar(x, ...)
 }
 \arguments{
-\item{x}{The object for which to create an exemplar}
+\item{x}{The object to use as the exemplar of the validation function.}
 
 \item{...}{Additional arguments used when building the assertions. Currently
-unused.}
+this is only used to apply validation to only certain columns in a data
+frame. This uses \code{tidyselect} functions. Refer to \code{dplyr} package for
+more information.}
 }
 \description{
-Create a validation function from an exemplar
+This function will print a validation function that can be used to make sure
+that a new object looks like the input (its \emph{exemplar}).
+
+Some checks are commented out. This is because the exemplar does not meet the
+criteria (eg. no duplicate values) or the checks are too specific to be used
+by default (range checks). The intention is that users will modify the
+validation functions to meet their needs before placing them in pipelines and
+scripts.
+
+The functions produced by \code{exemplar} require at least R 3.5 (due to
+improvements made to \verb{\link{stopifnot}} but otherwise requires no
+dependencies. That is, \code{exemplar} generates functions that do not need
+\code{exemplar} or any other packages to run.
+}
+\examples{
+exemplar(mtcars)
+exemplar(mtcars$gear)
+exemplar(mtcars, -cyl)
+exemplar(mtcars, starts_with("d"))
+
 }

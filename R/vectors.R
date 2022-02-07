@@ -7,7 +7,8 @@ assertions.double <- function(x, data_name = "data", ...) {
     generate_none_missing_assertion(x, data_name),
     generate_uniqueness_assertion(x, data_name),
     generate_polarity_assertion(data_name, min_value, max_value),
-    generate_range_assertions(data_name, min_value, max_value)
+    generate_range_assertions(data_name, min_value, max_value),
+    generate_sd_assertions(x, data_name)
   )
 }
 
@@ -20,7 +21,8 @@ assertions.integer <- function(x, data_name = "data", ...) {
     generate_none_missing_assertion(x, data_name),
     generate_uniqueness_assertion(x, data_name),
     generate_polarity_assertion(data_name, min_value, max_value),
-    generate_range_assertions(data_name, min_value, max_value)
+    generate_range_assertions(data_name, min_value, max_value),
+    generate_sd_assertions(x, data_name)
   )
 }
 
@@ -34,10 +36,24 @@ assertions.logical <- function(x, data_name = "data", ...) {
 
 #' @export
 assertions.character <- function(x, data_name = "data", ...) {
+  min_length <- min(sapply(x, nchar), na.rm = TRUE)
+  max_length <- max(sapply(x, nchar), na.rm = TRUE)
+
+  nchar_range_assertions <- c(
+    "# Uncomment or modify the below range assertions if needed:",
+    comment_out(glue::glue(
+      "max(sapply({data_name}, nchar), na.rm = TRUE) <= {max_length}"
+    )),
+    comment_out(glue::glue(
+      "{min_length} <= min(sapply({data_name}, nchar), na.rm = TRUE)"
+    ))
+  )
+
   c(
     glue::glue("is.character({data_name})"),
     generate_none_missing_assertion(x, data_name),
-    generate_uniqueness_assertion(x, data_name)
+    generate_uniqueness_assertion(x, data_name),
+    nchar_range_assertions
   )
 }
 
@@ -53,3 +69,30 @@ assertions.POSIXct <- function(x, data_name = "data", ...) {
   )
 }
 
+
+#' @export
+assertions.ordered <- function(x, data_name = "data", ...) {
+  c(
+    glue::glue("is.ordered({data_name})"),
+    assertions.factor(x, data_name, ...)
+  )
+}
+
+#' @export
+assertions.factor <- function(x, data_name = "data", ...) {
+  level_assertion <- if (is.ordered(x)) {
+    expected_levels <- input_character_vector(levels(x))
+    glue::glue("identical(levels({data_name}), {expected_levels})")
+  } else {
+    # in this case order doesn't matter so we sort before comparing
+    expected_levels <- input_character_vector(sort(levels(x)))
+    glue::glue("identical(sort(levels({data_name})), {expected_levels})")
+  }
+
+  c(
+    glue::glue("is.factor({data_name})"),
+    level_assertion,
+    generate_none_missing_assertion(x, data_name),
+    generate_uniqueness_assertion(x, data_name)
+  )
+}
