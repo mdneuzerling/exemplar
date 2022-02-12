@@ -60,6 +60,7 @@ exemplar <- function(x, ...) {
 assertions <- function(x, data_name, ...) UseMethod("assertions")
 
 #' @export
+#' @keywords internal
 assertions.default <- function(x, data_name = "data", ...) {
   correct_class <- input_character_vector(class(x))
   glue::glue("class({data_name}) == {correct_class}")
