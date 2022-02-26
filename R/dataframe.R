@@ -14,7 +14,7 @@ assertions.data.frame <- function(x, data_name = "data", ...) {
   # columns from a larger data frame then this might not be true, so we include
   # the assertion but comment it out.
   column_assertion <- glue::glue(
-    "colnames({data_name}) == {input_character_vector(selected_columns)}"
+    "identical(colnames({data_name}), {input_character_vector(selected_columns)})"
   )
   if (!identical(selected_columns, names(x))) {
     column_assertion <- c(
