@@ -30,7 +30,7 @@ assertions.data.frame <- function(x, data_name = "data", ...) {
       to_assert,
       "", # new line
       glue::glue("\"{column}\" %in% colnames({data_name})"),
-      assertions(x[[column]], data_name = glue::glue("data${column}"))
+      assertions(x[[column]], data_name = glue::glue("data[[\"{column}\"]]"))
     )
   }
 
