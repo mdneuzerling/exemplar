@@ -20,6 +20,11 @@
 #'   this is only used to apply validation to only certain columns in a data
 #'   frame. This uses `tidyselect` functions. Refer to `dplyr` package for
 #'   more information.
+#' @param .function_suffix By default the generated function will be named after
+#'   the input, eg. `exemplar(mtcars)` will generate a function named
+#'   `validate_mtcars`. This parameter allows overriding the suffix, eg.
+#'   `exemplar(mtcars, .function_suffix = "my_data")` will generate a function
+#'   named `validate_my_data`.
 #'
 #' @examples
 #' exemplar(mtcars)
@@ -28,17 +33,19 @@
 #' exemplar(mtcars, starts_with("d"))
 #'
 #' @export
-exemplar <- function(x, ...) {
-  # Guess a suitable function name from x, and replace all punctuation with "_"
-  function_suffix <- gsub("[[:punct:]]", "_", deparse(substitute(x)))
-  function_suffix <- gsub(" ", "", function_suffix)
-  # If the input comes from a pipe, it will be just a . which is converted
-  # to an underscore. In this case, fall back to a default "data"
-  if (function_suffix == "_") function_suffix <- "data"
+exemplar <- function(x, ..., .function_suffix = NULL) {
+  if (is.null(.function_suffix)) {
+    # Guess a suitable function name from x, and replace all punctuation with "_"
+    .function_suffix <- gsub("[[:punct:]]", "_", deparse(substitute(x)))
+    .function_suffix <- gsub(" ", "", .function_suffix)
+    # If the input comes from a pipe, it will be just a . which is converted
+    # to an underscore. In this case, fall back to a default "data"
+    if (.function_suffix == "_") .function_suffix <- "data"
+  }
 
   styled <- styler::style_text(
     c(
-      template_header(function_suffix),
+      template_header(.function_suffix),
       assertions(x, data_name = "data", ...),
       template_footer()
     )

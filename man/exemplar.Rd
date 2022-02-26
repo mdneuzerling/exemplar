@@ -4,7 +4,7 @@
 \alias{exemplar}
 \title{Create a validation function from an exemplar}
 \usage{
-exemplar(x, ...)
+exemplar(x, ..., .function_suffix = NULL)
 }
 \arguments{
 \item{x}{The object to use as the exemplar of the validation function.}
@@ -13,6 +13,12 @@ exemplar(x, ...)
 this is only used to apply validation to only certain columns in a data
 frame. This uses \code{tidyselect} functions. Refer to \code{dplyr} package for
 more information.}
+
+\item{.function_suffix}{By default the generated function will be named after
+the input, eg. \code{exemplar(mtcars)} will generate a function named
+\code{validate_mtcars}. This parameter allows overriding the suffix, eg.
+\code{exemplar(mtcars, .function_suffix = "my_data")} will generate a function
+named \code{validate_my_data}.}
 }
 \description{
 This function will print a validation function that can be used to make sure
