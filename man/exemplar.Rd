@@ -4,7 +4,14 @@
 \alias{exemplar}
 \title{Create a validation function from an exemplar}
 \usage{
-exemplar(x, ..., .function_suffix = NULL)
+exemplar(
+  x,
+  ...,
+  .function_suffix = NULL,
+  .enable_range_assertions = FALSE,
+  .enable_deviance_assertions = FALSE,
+  .allowed_deviance = 4
+)
 }
 \arguments{
 \item{x}{The object to use as the exemplar of the validation function.}
@@ -19,6 +26,24 @@ the input, eg. \code{exemplar(mtcars)} will generate a function named
 \code{validate_mtcars}. This parameter allows overriding the suffix, eg.
 \code{exemplar(mtcars, .function_suffix = "my_data")} will generate a function
 named \code{validate_my_data}.}
+
+\item{.enable_range_assertions}{Assertions for numeric columns/vectors will
+include range assertions, to ensure that any new data is within the range
+of the exemplar. These assertions will be commented out by default, unless
+the argument to this parameter is \code{TRUE}.}
+
+\item{.enable_deviance_assertions}{Assertions for numeric columns/vectors
+will include deviance assertions, to ensure that any new data is within a
+number of standard deviations of the mean of the exemplar, as configured by
+\code{.allowed_deviance}. These assertions will be commented out by default,
+unless the argument to this parameter is \code{TRUE}.}
+
+\item{.allowed_deviance}{Configures the number of standard deviations from
+the mean that new data is allowed to be. The deviance assertions are
+commented out by default unless \code{.enable_deviance_assertions} is set to
+\code{TRUE}. The \code{.allowed_deviance} defaults to 4, such that new data is
+within 4 standard deviations of the mean based on the statistical
+properties of the exemplar.}
 }
 \description{
 This function will print a validation function that can be used to make sure
@@ -40,5 +65,6 @@ exemplar(mtcars)
 exemplar(mtcars$gear)
 exemplar(mtcars, -cyl)
 exemplar(mtcars, starts_with("d"))
+exemplar(mtcars, .function_suffix = "my_data")
 
 }

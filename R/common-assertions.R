@@ -14,50 +14,72 @@ generate_polarity_assertion <- function(data_name, min_value, max_value) {
 
 generate_none_missing_assertion <- function(x, data_name) {
   missing_found <- any(is.na(x) | is.null(x))
-  to_assert <- maybe_comment(
+  maybe_comment_with_remark(
     glue::glue("!any(is.na({data_name}) | is.null({data_name}))"),
-    comment = missing_found
+    condition = missing_found,
+    remark = "Missing values were detected so this assertion has been disabled:"
   )
-  if (missing_found) {
-    to_assert <- c(
-      "# Missing values were detected so this assertion has been disabled:",
-      to_assert
-    )
-  }
-  to_assert
 }
 
 generate_uniqueness_assertion <- function(x, data_name) {
   duplicates_found <- any(duplicated(x))
-  to_assert <- maybe_comment(
+  maybe_comment_with_remark(
     glue::glue("!any(duplicated({data_name}))"),
-    comment = duplicates_found
+    condition = duplicates_found,
+    remark = "Duplicate values were detected so this assertion has been disabled:"
   )
-  if (duplicates_found) {
-    to_assert <- c(
-      "# Duplicate values were detected so this assertion has been disabled:",
-      to_assert
+}
+
+generate_range_assertions <- function(
+  data_name,
+  min_value,
+  max_value,
+  enable = TRUE
+) {
+  to_assert <- c(
+    maybe_comment(
+      glue::glue("max({data_name}, na.rm = TRUE) <= {max_value}"),
+      !enable
+    ),
+    maybe_comment(
+      glue::glue("{min_value} <= min({data_name}, na.rm = TRUE)"),
+      !enable
     )
-  }
-  to_assert
-}
-
-generate_range_assertions <- function(data_name, min_value, max_value) {
-  c(
-    "# Uncomment or modify the below range assertions if needed:",
-    comment_out(glue::glue("max({data_name}, na.rm = TRUE) <= {max_value}")),
-    comment_out(glue::glue("{min_value} <= min({data_name}, na.rm = TRUE)"))
+  )
+  preface(
+    to_assert,
+    "(Un)comment or modify the below range assertions if needed:"
   )
 }
 
-generate_sd_assertions <- function(x, data_name) {
+generate_sd_assertions <- function(
+  x,
+  data_name,
+  allowed_deviance = 4,
+  enable = TRUE
+) {
   stopifnot(is.numeric(x))
   avg <- round(mean(x, na.rm = TRUE), 2)
   std_dev <- round(stats::sd(x, na.rm = TRUE), 2)
-  c(
-    "# Uncomment or modify the below deviance from mean assertions if needed.",
-    glue::glue("# The mean is {avg} and the standard deviation is {std_dev}:"),
-    comment_out(glue::glue("max({data_name}, na.rm = TRUE) <= {avg} + 4 * {std_dev}")),
-    comment_out(glue::glue("{avg} - 4 * {std_dev} <= min({data_name}, na.rm = TRUE)"))
+  to_assert <- c(
+    maybe_comment(
+      glue::glue(
+        "max({data_name}, na.rm = TRUE) <= {avg} + {allowed_deviance} * {std_dev}"
+      ),
+      !enable
+    ),
+    maybe_comment(
+      glue::glue(
+        "{avg} - {allowed_deviance} * {std_dev} <= max({data_name}, na.rm = TRUE)"
+      ),
+      !enable
+    )
+  )
+  preface(
+    to_assert,
+    c(
+      "(Un)comment or modify the below deviance assertions if needed.",
+      glue::glue("The mean is {avg} and the standard deviation is {std_dev}:")
+    )
   )
 }

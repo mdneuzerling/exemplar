@@ -25,15 +25,38 @@
 #'   `validate_mtcars`. This parameter allows overriding the suffix, eg.
 #'   `exemplar(mtcars, .function_suffix = "my_data")` will generate a function
 #'   named `validate_my_data`.
+#' @param .enable_range_assertions Assertions for numeric columns/vectors will
+#'   include range assertions, to ensure that any new data is within the range
+#'   of the exemplar. These assertions will be commented out by default, unless
+#'   the argument to this parameter is `TRUE`.
+#' @param .enable_deviance_assertions Assertions for numeric columns/vectors
+#'   will include deviance assertions, to ensure that any new data is within a
+#'   number of standard deviations of the mean of the exemplar, as configured by
+#'   `.allowed_deviance`. These assertions will be commented out by default,
+#'   unless the argument to this parameter is `TRUE`.
+#' @param .allowed_deviance Configures the number of standard deviations from
+#'   the mean that new data is allowed to be. The deviance assertions are
+#'   commented out by default unless `.enable_deviance_assertions` is set to
+#'   `TRUE`. The `.allowed_deviance` defaults to 4, such that new data is
+#'   within 4 standard deviations of the mean based on the statistical
+#'   properties of the exemplar.
 #'
 #' @examples
 #' exemplar(mtcars)
 #' exemplar(mtcars$gear)
 #' exemplar(mtcars, -cyl)
 #' exemplar(mtcars, starts_with("d"))
+#' exemplar(mtcars, .function_suffix = "my_data")
 #'
 #' @export
-exemplar <- function(x, ..., .function_suffix = NULL) {
+exemplar <- function(
+  x,
+  ...,
+  .function_suffix = NULL,
+  .enable_range_assertions = FALSE,
+  .enable_deviance_assertions = FALSE,
+  .allowed_deviance = 4
+) {
   if (is.null(.function_suffix)) {
     # Guess a suitable function name from x, and replace all punctuation with "_"
     .function_suffix <- gsub("[[:punct:]]", "_", deparse(substitute(x)))
@@ -46,7 +69,14 @@ exemplar <- function(x, ..., .function_suffix = NULL) {
   styled <- styler::style_text(
     c(
       template_header(.function_suffix),
-      assertions(x, data_name = "data", ...),
+      assertions(
+        x,
+        data_name = "data",
+        ...,
+        .enable_range_assertions = .enable_range_assertions,
+        .enable_deviance_assertions = .enable_deviance_assertions,
+        .allowed_deviance = .allowed_deviance
+      ),
       template_footer()
     )
   )

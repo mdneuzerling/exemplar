@@ -1,5 +1,12 @@
 #' @export
-assertions.data.frame <- function(x, data_name = "data", ...) {
+assertions.data.frame <- function(
+  x,
+  data_name = "data",
+  ...,
+  .enable_range_assertions = FALSE,
+  .enable_deviance_assertions = FALSE,
+  .allowed_deviance = 4
+) {
   if (missing(...)) {
     selected_columns <- colnames(x)
   } else {
@@ -30,7 +37,13 @@ assertions.data.frame <- function(x, data_name = "data", ...) {
       to_assert,
       "", # new line
       glue::glue("\"{column}\" %in% colnames({data_name})"),
-      assertions(x[[column]], data_name = glue::glue("data[[\"{column}\"]]"))
+      assertions(
+        x[[column]],
+        data_name = glue::glue("data[[\"{column}\"]]"),
+        .enable_range_assertions = .enable_range_assertions,
+        .enable_deviance_assertions = .enable_deviance_assertions,
+        .allowed_deviance = .allowed_deviance
+      )
     )
   }
 

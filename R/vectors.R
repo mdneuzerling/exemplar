@@ -1,5 +1,12 @@
 #' @export
-assertions.double <- function(x, data_name = "data", ...) {
+assertions.double <- function(
+  x,
+  data_name = "data",
+  ...,
+  .enable_range_assertions = FALSE,
+  .enable_deviance_assertions = FALSE,
+  .allowed_deviance = 4
+) {
   min_value <- min(x, na.rm = TRUE)
   max_value <- max(x, na.rm = TRUE)
   c(
@@ -7,8 +14,17 @@ assertions.double <- function(x, data_name = "data", ...) {
     generate_none_missing_assertion(x, data_name),
     generate_uniqueness_assertion(x, data_name),
     generate_polarity_assertion(data_name, min_value, max_value),
-    generate_range_assertions(data_name, min_value, max_value),
-    generate_sd_assertions(x, data_name)
+    generate_range_assertions(
+      data_name,
+      min_value,
+      max_value,
+      enable = .enable_range_assertions
+    ),
+    generate_sd_assertions(
+      x,
+      data_name,
+      enable = .enable_deviance_assertions,
+      allowed_deviance = .allowed_deviance)
   )
 }
 
