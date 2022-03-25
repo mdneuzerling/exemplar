@@ -26,3 +26,14 @@ test_that("Validation test: starwars", {
   eval(parse(text = function_text))
   expect_true(validate_starwars(starwars))
 })
+
+test_that("Validation test: iris", {
+  withr::with_output_sink(
+    nullfile(),
+    function_text <- exemplar(iris,
+                              .enable_deviance_assertions = TRUE,
+                              .allowed_deviance =  2)
+  )
+  eval(parse(text = function_text))
+  expect_true(validate_iris(iris))
+})
