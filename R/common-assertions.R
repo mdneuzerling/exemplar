@@ -75,11 +75,25 @@ generate_sd_assertions <- function(
       !enable
     )
   )
-  preface(
-    to_assert,
-    c(
-      "(Un)comment or modify the below deviance assertions if needed.",
-      glue::glue("The mean is {avg} and the standard deviation is {std_dev}:")
+  illegal <- any(c(x > (avg + std_dev * allowed_deviance),
+                   x < (avg -std_dev * allowed_deviance)), na.rm = TRUE)
+
+  sd_assertion_output <- maybe_comment_with_remark(
+    code = to_assert,
+    condition = illegal,
+    remark = glue::glue("Data is outside of mean ({avg}) +/- ({allowed_deviance} * {std_dev}),
+                        so Standard Deviation assertions have been disabled."))
+
+  if (!illegal){
+    sd_assertion_output <- preface(
+      to_assert,
+      c(
+        "(Un)comment or modify the below deviance assertions if needed.",
+        glue::glue("The mean is {avg} and the standard deviation is {std_dev}:")
+      )
     )
-  )
+  }
+
+  return(sd_assertion_output)
+
 }
