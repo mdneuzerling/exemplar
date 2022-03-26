@@ -91,8 +91,10 @@ generate_sd_assertions <- function(
   sd_assertion_output <- maybe_comment_with_remark(
     code = to_assert,
     condition = illegal,
-    remark = glue::glue("Data is outside of mean ({avg}) +/- ({allowed_deviance} * {std_dev}),
-                        so Standard Deviation assertions have been disabled."))
+    remark = glue::glue(
+    "Data is outside of mean ({avg}) +/- ({allowed_deviance} * {std_dev}),
+so Standard Deviation assertions have been disabled.")
+  )
 
   if (!illegal){
     sd_assertion_output <- preface(
@@ -105,5 +107,4 @@ generate_sd_assertions <- function(
   }
 
   return(sd_assertion_output)
-
 }
