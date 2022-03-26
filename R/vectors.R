@@ -52,6 +52,21 @@ assertions.logical <- function(x, data_name = "data", ...) {
 
 #' @export
 assertions.character <- function(x, data_name = "data", ...) {
+
+  to_assert <- glue::glue("is.character({data_name})")
+
+  if (!all(validUTF8(x))) {
+    return(
+      c(
+        to_assert,
+        comment_out(paste(
+          "This character vector is not valid UTF-8, so further assertions have",
+          "been skipped"
+        ))
+      )
+    )
+  }
+
   min_length <- min(sapply(x, nchar), na.rm = TRUE)
   max_length <- max(sapply(x, nchar), na.rm = TRUE)
 
@@ -66,7 +81,7 @@ assertions.character <- function(x, data_name = "data", ...) {
   )
 
   c(
-    glue::glue("is.character({data_name})"),
+    to_assert,
     generate_none_missing_assertion(x, data_name),
     generate_uniqueness_assertion(x, data_name),
     nchar_range_assertions
