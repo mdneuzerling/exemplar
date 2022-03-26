@@ -59,6 +59,16 @@ generate_sd_assertions <- function(
   enable = TRUE
 ) {
   stopifnot(is.numeric(x))
+
+  if (length(x) == 1) {
+    return(
+      comment_out(
+        "Deviance assertions are skipped because the exemplar contained only ",
+        "one element"
+      )
+    )
+  }
+
   avg <- round(mean(x, na.rm = TRUE), 2)
   std_dev <- round(stats::sd(x, na.rm = TRUE), 2)
   to_assert <- c(

@@ -59,10 +59,10 @@ assertions.character <- function(x, data_name = "data", ...) {
     return(
       c(
         to_assert,
-        comment_out(paste(
-          "This character vector is not valid UTF-8, so further assertions have",
-          "been skipped"
-        ))
+        comment_out(
+          "This character vector is not valid UTF-8, so further assertions",
+          "have been skipped"
+        )
       )
     )
   }

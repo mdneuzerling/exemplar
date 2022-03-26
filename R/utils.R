@@ -17,7 +17,7 @@ input_POSIXct <- function(x) {
   glue::glue("as.POSIXct(\"{x}\", tz = \"{tz}\")")
 }
 
-comment_out <- function(comment) paste("#", comment)
+comment_out <- function(...) paste("#", paste0(...))
 
 maybe_comment <- function(code, comment = FALSE) {
   if (comment) comment_out(code) else code
