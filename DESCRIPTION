@@ -1,6 +1,6 @@
 Package: exemplar
 Title: Generate Validation Functions to Make Sure One Object Looks Like Another
-Version: 0.0.0.9001
+Version: 0.1.0
 Authors@R: 
     person(given = "David",
            family = "Neuzerling",
@@ -12,12 +12,11 @@ Description: Generate dependency-free validation functions to make sure one
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Depends: 
     R (>= 3.5.0)
 Imports: 
     styler,
-    prettycode,
     tidyselect,
     rlang,
     glue,

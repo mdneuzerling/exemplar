@@ -5,7 +5,8 @@ assertions.data.frame <- function(
   ...,
   .enable_range_assertions = FALSE,
   .enable_deviance_assertions = FALSE,
-  .allowed_deviance = 4
+  .allowed_deviance = 4,
+  .check_non_empty = TRUE
 ) {
   if (missing(...)) {
     selected_columns <- colnames(x)
@@ -15,6 +16,12 @@ assertions.data.frame <- function(
   }
 
   to_assert <- glue::glue("is.data.frame({data_name})")
+
+  assert_non_empty <- if (.check_non_empty) {
+    glue::glue("nrow({data_name}) > 0")
+  } else {
+    NULL
+  }
 
   # This assertion checks that all columns are present, in the correct order,
   # and that there are no other columns present. If we're selecting a subset of
@@ -35,6 +42,7 @@ assertions.data.frame <- function(
   for (column in selected_columns) {
     to_assert <- c(
       to_assert,
+      assert_non_empty,
       "", # new line
       glue::glue("\"{column}\" %in% colnames({data_name})"),
       assertions(
@@ -49,3 +57,4 @@ assertions.data.frame <- function(
 
   to_assert
 }
+
